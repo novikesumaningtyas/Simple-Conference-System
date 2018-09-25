@@ -1,0 +1,25 @@
+
+public class Reviewer extends User 
+{
+	private String expertise;
+	
+	public Reviewer()
+	{
+		expertise = "";
+	}
+	
+	public Reviewer(String exp)
+	{
+		expertise = exp;
+	}
+
+	public String getExpertise() {
+		return expertise;
+	}
+
+	public void setExpertise(String expertise) {
+		this.expertise = expertise;
+	}
+		
+	
+}

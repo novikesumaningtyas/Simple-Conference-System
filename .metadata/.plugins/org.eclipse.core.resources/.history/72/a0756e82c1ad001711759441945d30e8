@@ -1,0 +1,82 @@
+
+public class Menu 
+{
+	public void displayRoles()
+	{
+		System.out.println("\n\t\t:::::::::::::::::::::::::::::::::::");
+		System.out.println("\t\t|      Choose the role below :    |");
+		System.out.println("\t\t:::::::::::::::::::::::::::::::::::");
+		System.out.println("\t\t|       [1] Chair                 |");
+        System.out.println("\t\t|       [2] Reviewer         	  |");
+        System.out.println("\t\t|       [3] Author                |");
+        System.out.println("\t\t===================================");
+        System.out.print("\t\t  Please input the role number : ");
+	}
+	
+	
+	public void welcome()
+	{
+		System.out.println("Welcome to the MonCC CMS");
+	}
+	
+	public void homeDisplay()
+	{
+		System.out.println("\n\t\t:::::::::::::::::::::::::::::::::::");
+		System.out.println("\t\t|     Welcome to MonCC CMS        |");
+		System.out.println("\t\t:::::::::::::::::::::::::::::::::::");
+		System.out.println("\t\t|Please choose the options below :|");
+        System.out.println("\t\t|       [1] Register         	  |");
+        System.out.println("\t\t|       [2] LogIn                 |");
+        System.out.println("\t\t===================================");
+        System.out.print("\t\t  Please input the option number : ");
+	}
+	
+	public void authorDisplay()
+	{
+		
+		System.out.println("\t\t|     Welcome Author              |");
+		System.out.println("\t\t:::::::::::::::::::::::::::::::::::");
+		System.out.println("\t\t|Please choose the options below :|");
+        System.out.println("\t\t|  [1] Submit Paper For Conference|");
+        System.out.println("\t\t|  [2] Display Conferences        |");
+        System.out.println("\t\t|  [3] Display Paper Detail       |");
+        System.out.println("\t\t|  [4] Delete Paper               |");
+        System.out.println("\t\t|  [5] Log Out                    |");
+        System.out.println("\t\t===================================");
+        System.out.print("\t\t  Please input the option number : ");
+		
+	}
+	
+	public void chairDisplay()
+	{
+		System.out.println("\t\t|            Welcome Chair           |");
+		System.out.println("\t\t::::::::::::::::::::::::::::::::::::::");
+		System.out.println("\t\t|Please choose the options below :   |");
+        System.out.println("\t\t|   [1] Create Conference            |");
+        System.out.println("\t\t|   [2] Display Conferences          |");
+        System.out.println("\t\t|   [3] Modify Conferences           |");
+        System.out.println("\t\t|   [4] Delete Conferences           |");
+        System.out.println("\t\t|   [5] Assign Paper To Reviewer     |");
+        System.out.println("\t\t|   [6] Examine Paper's Review       |");
+        System.out.println("\t\t|   [7] Send Notification To Author  |");
+        System.out.println("\t\t|   [8] Log Out                      |");
+        System.out.println("\t\t===================================");
+        System.out.print("\t\t  Please input the option number : ");
+	}
+	
+	public void reviewerDisplay()
+	{
+		System.out.println("\t\t|     Welcome Reviewer            |");
+		System.out.println("\t\t:::::::::::::::::::::::::::::::::::");
+		System.out.println("\t\t|Please choose the options below :|");
+        System.out.println("\t\t|   [1] Review Paper              |");
+        System.out.println("\t\t|   [2] Display Reviews           |");
+        System.out.println("\t\t|   [3] Display Reviewed Paper    |");
+        //System.out.println("\t\t|       [3] Delete Conferences    |");
+        System.out.println("\t\t|   [4] Log Out                   |");
+        System.out.println("\t\t===================================");
+        System.out.print("\t\t  Please input the option number : ");		
+	}
+	
+	
+}

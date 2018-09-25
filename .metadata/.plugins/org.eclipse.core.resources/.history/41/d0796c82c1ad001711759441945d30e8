@@ -1,0 +1,28 @@
+
+public class CMS {
+
+	public static void main(String[] args) 
+	{
+		// TODO Auto-generated method stub
+		//Author person = new Author();
+		ConferenceController test = new ConferenceController();
+//		Author author = new Author();
+//		Chair chair = new Chair();
+		//test.logIn();
+//		test.displayKeyword();
+		//test.chooseRole();
+		//test.displayRoles();
+		//test.insertKeyword();
+		//test.insertContent();
+		//test.uploadDataFromFile();
+		//test.displayAllPaperStatus();
+		//test.runCMSAuthor(author);
+		//test.runCMSChair(chair);
+		//test.displayAllPaperStatus();
+		//Chair chair = new Chair();
+		test.start();
+		//test.createConference(chair);
+		
+	}
+
+}

@@ -1,0 +1,51 @@
+INFO  2017-10-12 23:09:11,425 (Saros.java:220) Starting Saros 14.10.31 running:
+  Java Version: 1.8.0_121
+  Java Vendor: Oracle Corporation
+  Eclipse Runtime Version: 3.13.0.v20170207-1030
+  Operating System: Windows 10 (10.0)
+  Hardware Architecture: amd64
+INFO  2017-10-12 23:09:11,463 (SarosContext.java:153) creating Saros runtime context...
+DEBUG 2017-10-12 23:09:11,516 (XMPPAccountStore.java:117) loading accounts from file: C:\Users\USER\.saros\config.dat
+DEBUG 2017-10-12 23:09:11,857 (XMPPAccountStore.java:176) loaded 1 account(s)
+INFO  2017-10-12 23:09:12,045 (SarosContext.java:199) successfully created Saros runtime context
+DEBUG 2017-10-12 23:09:12,071 (DataTransferManager.java:467) used transport order for the current XMPP connection: [XMPP-Socks5-Transport, XMPP-IBB-Transport]
+INFO  2017-10-12 23:09:12,098 (PreferenceInitializer.java:50) initializing preference default values
+DEBUG 2017-10-12 23:09:12,157 (SarosAnnotation.java:117) resetting annotation colors
+DEBUG 2017-10-12 23:09:12,164 (Saros.java:430) skipping conversion of old XMPP accounts, because there are already new ones
+DEBUG 2017-10-12 23:09:16,699 (SharedDocumentProvider.java:77) SharedDocumentProvider created by Eclipse
+DEBUG 2017-10-12 23:09:23,510 (WhiteboardManager.java:194) WhiteboardManager instantiated
+DEBUG 2017-10-12 23:09:23,723 (XMPPConnectionService.java:439) started Socks5 proxy on port: 7777 [listening on all interfaces]
+DEBUG 2017-10-12 23:09:23,832 (DocumentRecord.java:93) Added Node: attr(150781016382824686) name=svg
+DEBUG 2017-10-12 23:09:26,188 (XMPPConnectionService.java:459) using autodetected addresses: [192.168.47.1, 192.168.2.112, 192.168.208.1, 192.168.56.1, fe80:0:0:0:150f:2ea9:7259:436%eth0, fe80:0:0:0:3012:528c:2719:d33b%eth1, fe80:0:0:0:9d7e:67ed:d02a:2d1e%eth4, fe80:0:0:0:751e:56ca:1d6d:b84e%eth6]
+DEBUG 2017-10-12 23:09:26,193 (XMPPConnectionService.java:398)  new connection state == CONNECTING
+ERROR 2017-10-12 23:09:26,507 (StunServiceImpl.java:263) error sending STUN request
+java.net.SocketException: Network is unreachable: Datagram send failed
+	at java.net.DualStackPlainDatagramSocketImpl.socketSend(Native Method)
+	at java.net.DualStackPlainDatagramSocketImpl.send(Unknown Source)
+	at java.net.DatagramSocket.send(Unknown Source)
+	at de.fu_berlin.inf.dpp.net.stun.internal.StunServiceImpl$StunDiscovery$1.run(StunServiceImpl.java:255)
+	at java.lang.Thread.run(Unknown Source)
+ERROR 2017-10-12 23:09:26,507 (StunServiceImpl.java:263) error sending STUN request
+java.net.SocketException: Network is unreachable: Datagram send failed
+	at java.net.DualStackPlainDatagramSocketImpl.socketSend(Native Method)
+	at java.net.DualStackPlainDatagramSocketImpl.send(Unknown Source)
+	at java.net.DatagramSocket.send(Unknown Source)
+	at de.fu_berlin.inf.dpp.net.stun.internal.StunServiceImpl$StunDiscovery$1.run(StunServiceImpl.java:255)
+	at java.lang.Thread.run(Unknown Source)
+ERROR 2017-10-12 23:09:26,507 (StunServiceImpl.java:263) error sending STUN request
+java.net.SocketException: Network is unreachable: Datagram send failed
+	at java.net.DualStackPlainDatagramSocketImpl.socketSend(Native Method)
+	at java.net.DualStackPlainDatagramSocketImpl.send(Unknown Source)
+	at java.net.DatagramSocket.send(Unknown Source)
+	at de.fu_berlin.inf.dpp.net.stun.internal.StunServiceImpl$StunDiscovery$1.run(StunServiceImpl.java:255)
+	at java.lang.Thread.run(Unknown Source)
+DEBUG 2017-10-12 23:09:31,182 (XMPPConnectionService.java:398) novi@saros-con.imp.fu-berlin.de/Saros new connection state == CONNECTED
+DEBUG 2017-10-12 23:09:31,183 (DataTransferManager.java:467) used transport order for the current XMPP connection: [XMPP-Socks5-Transport, XMPP-IBB-Transport]
+DEBUG 2017-10-12 23:09:31,185 (SkypeManager.java:289) Refreshing Skype username cache...
+WARN  2017-10-12 23:09:36,505 (StunServiceImpl.java:420) received no response from STUN server stunserver.org/67.227.226.240:3478 at local address /192.168.56.1:0
+WARN  2017-10-12 23:09:36,506 (StunServiceImpl.java:420) received no response from STUN server stunserver.org/67.227.226.240:3478 at local address /192.168.208.1:0
+WARN  2017-10-12 23:09:36,506 (StunServiceImpl.java:420) received no response from STUN server stunserver.org/67.227.226.240:3478 at local address /192.168.47.1:0
+WARN  2017-10-12 23:09:36,505 (StunServiceImpl.java:420) received no response from STUN server stunserver.org/67.227.226.240:3478 at local address /192.168.2.112:0
+DEBUG 2017-10-13 04:53:12,060 (XMPPConnectionService.java:398) novi@saros-con.imp.fu-berlin.de/Saros new connection state == DISCONNECTING
+DEBUG 2017-10-13 04:53:12,218 (XMPPConnectionService.java:398)  new connection state == NOT_CONNECTED
+DEBUG 2017-10-13 04:53:12,220 (UPnPServiceImpl.java:295) deleting existing port mappings

@@ -1,0 +1,1360 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class ConferenceController 
+{
+
+	private ArrayList<User> userList;
+	private ArrayList<Chair> chairList;
+	private ArrayList<Author> authorList;
+	private ArrayList<Reviewer> reviewerList;
+	private ArrayList<Keyword> keywordList;
+	private ArrayList<Conference> conferenceList;
+	private ArrayList<Paper> paperList;
+	private FileDataController file;
+	private Menu menu;
+	private Validation validation;
+	
+	public ConferenceController()
+	{
+		userList = new ArrayList<User>();
+		chairList = new ArrayList<Chair>();
+		authorList = new ArrayList<Author>();
+		reviewerList = new ArrayList<Reviewer>();
+		keywordList = new ArrayList<Keyword>();
+		paperList = new ArrayList<Paper>();
+		validation = new Validation();
+		conferenceList = new ArrayList<Conference>();
+		file = new FileDataController();
+		menu = new Menu();
+	}
+	
+	
+	public int checkRole(User user)
+	{
+		int result = 0;
+		
+		String role = user.getRole();
+		
+		if(role.equals("Chair"))
+			result = 1;
+		else
+			if(role.equals("Reviewer"))
+				result = 2;
+		else
+			if(role.equals("Author"))
+				result = 3;
+		
+		return result;
+			
+	}
+	
+	public User getUser(String username)
+	{
+		int index = 0;
+		User human = new User();
+		
+		for (User person : userList)
+		{
+			if (person.getUserName().equals(username))
+			{
+				human = userList.get(index);
+				break;
+			}
+			index = index + 1;
+		}
+		
+		return human;
+	}
+	
+	
+	public Chair getChair(String username)
+	{
+		int index = 0;
+		Chair human = new Chair();
+		
+		for (Chair person : chairList)
+		{
+			if (person.getUserName().equals(username))
+			{
+				human = chairList.get(index);
+				break;
+			}
+			index = index + 1;
+		}
+		
+		return human;
+	}
+	
+	public Author getAuthor(String username)
+	{
+		int index = 0;
+		Author human = new Author();
+		
+		for (Author person : authorList)
+		{
+			if (person.getUserName().equals(username))
+			{
+				human = authorList.get(index);
+				break;
+			}
+			index = index + 1;
+		}
+		
+		return human;
+	}	
+
+	public Reviewer getReviewer(String username)
+	{
+		int index = 0;
+		Reviewer human = new Reviewer();
+		
+		for (Reviewer person : reviewerList)
+		{
+			if (person.getUserName().equals(username))
+			{
+				human = reviewerList.get(index);
+				break;
+			}
+			index = index + 1;
+		}
+		
+		return human;
+	}		
+	
+	public void displayAllPaperStatus()
+	{
+		int index = 1;
+		//System.out.println("Submitted Papers List :");
+		for (Paper journal : paperList)
+		{
+			String title = journal.getTitle();
+			String conf = journal.getConference();
+			
+			int numbOfReviews = journal.getTotalReviews();
+			int numbOfReviewers = journal.getTotalReviewers();
+			
+			System.out.println("ID : " + index);
+			System.out.println("Title : " + title);
+			System.out.println("Topic : ");
+			ArrayList<String> topicList = journal.getTopic();
+			int ind = 1;
+			for(String keyword : topicList)
+			{
+				System.out.println("[" + ind + "]" + keyword);
+				ind = ind + 1;
+			}
+			System.out.println("Conference : " + conf );
+			System.out.println("Total Reviewers : " + numbOfReviews);
+			System.out.println("Total Reviews : " + numbOfReviewers); 
+			System.out.println("============================");
+			index = index + 1;
+						
+		}
+	}
+	
+	
+	public Paper selectPaper()
+	{
+		boolean valid = false;
+		String paperIndex = "";
+		
+		Scanner answer = new Scanner(System.in);
+		
+		while (!valid)
+		{	
+			System.out.println("Select the paper below :");
+			displayAllPaperStatus();
+			System.out.println("Input the Paper's ID : ");
+			paperIndex = answer.nextLine().trim();
+			valid = validation.checkNoBlank(paperIndex);
+		}
+		
+		int number = Integer.parseInt(paperIndex);
+		number = number - 1;
+		Paper paper = paperList.get(number);
+		
+		return paper;
+	}
+		
+	
+//	public ArrayList<Reviewer> displayReviewerWithTheSameExpertise(String keyword)
+//	{
+//		ArrayList<Reviewer> reviewerFilterList = new ArrayList<Reviewer>();
+//		
+//		for (Reviewer person : reviewerList)
+//		{
+//			if (person.getExpertise().equals(keyword))
+//				reviewerFilterList.add(person);
+//		}
+//		
+//		return reviewerFilterList;
+//		
+//	}
+//	
+//	public void displayReviewerFilterResult(ArrayList<Reviewer> List)
+//	{
+//		if (List.size() == 0)
+//			System.out.println("Sorry there is no available reviewer at this time");
+//		
+//		else
+//		{
+//			int index = 1;
+//			String exp = List.get(0).getExpertise();
+//			System.out.println("Reviewers' expertise : " + exp);
+//			for (Reviewer person : List)
+//			{
+//				System.out.println("ID: " + index);
+//				System.out.println("Name : " + person.getName());
+//			}
+//		
+//			System.out.println("Insert the reviewer ID: ");
+//		}
+//		
+//	}
+	
+	public Reviewer selectReviewer(ArrayList<Reviewer> newList)
+	{
+		Scanner console = new Scanner(System.in);
+		
+		boolean valid = false;
+		String choose = "";
+				
+		while (!valid)
+		{
+			choose = console.nextLine().trim();
+			valid = validation.checkNoBlank(choose);
+		}
+		
+		int indexReviewer = Integer.parseInt(choose);
+		int number = indexReviewer -1 ;
+		Reviewer reviewer = newList.get(number);
+		
+		return reviewer;
+	}
+	
+	
+	public void assignPaper()
+	{
+		Scanner console = new Scanner(System.in);
+		Paper selectedPaper = selectPaper();
+		ArrayList<String> topic = selectedPaper.getTopic();
+		
+		ArrayList<Reviewer> reviewerFilterList = new ArrayList<Reviewer>();
+		
+		for (String keyword : topic)
+		{
+			for (Reviewer person : reviewerList)
+			{
+				if (person.getExpertise().equals(keyword))
+					reviewerFilterList.add(person);
+			}
+		}	
+		
+		if (reviewerFilterList.size() == 0)
+			System.out.println("Sorry there is no available reviewer at this time");
+		
+		else
+		{
+			int index = 1;
+			String exp = reviewerFilterList.get(0).getExpertise();
+			System.out.println("Reviewers' expertise : " + exp);
+			for (Reviewer person : reviewerFilterList)
+			{
+				System.out.println("ID: " + index);
+				System.out.println("Name : " + person.getName());
+				index = index + 1;
+			}
+		
+			System.out.println("Insert the reviewer ID: ");
+			
+			Reviewer reviewer = selectReviewer(reviewerFilterList);
+			System.out.println("The reviewer you have chose is: " + reviewer.getName());
+			selectedPaper.setReviewer(reviewer.getName());
+			
+			int paperIndex = 0;
+			for (Paper journal : paperList)
+			{
+				String title = journal.getTitle();
+				
+				if (selectedPaper.getTitle().equals(title))
+					break;
+				
+				paperIndex = paperIndex + 1;
+			}
+			
+			paperList.set(paperIndex, selectedPaper);
+			displayPaper(selectedPaper);
+
+		}
+	}
+	
+	public String logIn()
+	{
+		Scanner answer = new Scanner(System.in);
+		String username = "";
+		String password = "";
+		boolean valid = false;
+		
+		while (!valid)
+		{
+			System.out.println("Please insert your username : ");
+			username = answer.nextLine().trim();
+			valid = checkUserNameExistance(username);
+			if (valid == false)
+				System.out.println("Username is not exist, please input the correct username");
+		}
+		
+		valid = false;
+		while (!valid)
+		{
+			System.out.println("Please insert your password : ");
+			password = answer.nextLine().trim();
+			valid = checkUserPassword(username, password);
+			if (valid == false)
+				System.out.println("Password is not correct");
+		}	
+		
+		menu.welcome();
+		return username;
+	}
+	
+	public void logOut()
+	{
+		String decision = "";
+		Scanner console = new Scanner(System.in);
+		do
+		{
+			boolean valid = false;
+			while (!valid)
+			{
+				System.out.println("Are you sure you want to log out?(y/n)");
+				decision = console.nextLine().trim().toLowerCase();
+				valid = validation.checkNoBlank(decision);
+			}
+			
+			decision = decision.substring(0, 1);
+			
+			if (decision.equals("y"))
+            {
+                runCMS();
+            }    
+            else
+                if (decision.equals("n"))
+                    return; 
+            else
+                 System.out.println("\t\tPlease enter your answer again (y/n) ");			
+		}while (!decision.equals("n") && !decision.equals("y"));
+	}
+	
+	public boolean checkUserNameExistance(String username)
+	{
+		boolean result = false;
+		for (User person : userList)
+		{
+			String personUserName = person.getUserName();
+			
+			if(username.equals(personUserName))
+			{
+				result = true;
+				break;
+			}	
+		}
+		return result;
+	}
+	
+	
+	public boolean checkUserPassword(String username, String password)
+	{
+		boolean result = false;
+		for (User person : userList)
+		{
+			if (person.getUserName().equals(username))
+			{
+				String personUserPassword = person.getPassword();
+			
+				if(password.equals(personUserPassword))
+				{
+					result = true;
+					break;
+				}
+			}
+		}
+		return result;
+	}
+	
+		
+	public void displayUser(User user)
+	{
+		String name = user.getName();
+		String userName = user.getUserName();
+		String role = user.getRole();
+		String jobTitle = user.getJobTitle();
+		String email = user.getEmail();
+		String pass = user.getPassword();
+		
+		System.out.println("|Name     : " + name  ); 
+		System.out.println("|User Name: " + userName  );
+		System.out.println("|Role     : " + role  ); 
+		System.out.println("|Job Title: " + jobTitle );
+		System.out.println("|Email    : " + email  );
+		System.out.println("|Password : " + pass  );
+	}
+	
+	public void displayChair(User user)
+	{
+		System.out.println(":::::::::::::::::::::::::::::::::::::::::::::::::");
+		System.out.println("::Hi Chair " + user.getUserName().toUpperCase() +"! Welcome to MonCC CMS::");
+		System.out.println("::   Please read your details below   ::");
+		System.out.println("=================================================");
+		displayUser(user);
+		System.out.println("=================================================");	
+	}
+	
+	
+
+	public void displayAllUser(ArrayList<User> userList)
+	{
+		for (User person : userList)
+		{
+			displayUser(person);
+			System.out.println("==================================");
+		}
+		
+	}
+	
+	public void createUser(String chosen)
+	{
+		String role = chosen;
+		Scanner answer = new Scanner(System.in);
+		System.out.println("Please insert your name");
+		String name = answer.nextLine().trim();
+		System.out.println("Please insert your username");
+		String username = answer.nextLine().trim();
+		System.out.println("Please insert your job title");
+		String job = answer.nextLine().trim();
+		System.out.println("Please insert your email");
+		String email = answer.nextLine().trim();
+		System.out.println("Please set your password");
+		String password = answer.nextLine().trim();
+	
+		int totalUser = userList.size();
+		int id = totalUser + 1; 
+		//answer.close();
+		
+		if(role.equals("1"))
+		{
+			createChair(name, username, job, email, password);
+		}
+		else
+			if (role.equals("2"))
+		{
+				createReviewer(name, username, job, email, password);
+		}
+		else 
+			if (role.equals("3"))
+		{
+				createAuthor(name, username, job, email, password);
+		}
+		
+	}
+	
+	public void createChair(String name, String username, String job, String email, String password)
+	{
+		Chair chair = new Chair();
+		String chairName = name;
+		String chairUsername = username;
+		String role = "Chair";
+		String chairJob = job;
+		String chairEmail = email;
+		String pass = password;
+		
+		chair.setName(chairName);
+		chair.setUserName(chairUsername);
+		chair.setRole(role);
+		chair.setJobTitle(chairJob);
+		chair.setEmail(chairEmail);
+		chair.setPassword(pass);
+		
+		chairList.add(chair);
+		userList.add(chair);
+		displayChair(chair);
+	}
+	
+	public String insertKeyword()
+	{
+		boolean valid = false;
+		String key = "";
+		
+		Scanner answer = new Scanner(System.in);
+		
+		while (!valid)
+		{	
+			displayKeyword();
+			key = answer.nextLine().trim();
+			System.out.println(key);
+			valid = validation.checkNoBlank(key);
+		}
+		
+		int number = Integer.parseInt(key);
+		
+		number = number - 1;
+		String keyword = keywordList.get(number).getKeyword();
+		
+		
+		return keyword;
+		
+	}
+	
+	public void createReviewer(String name, String username, String job, String email, String password)
+	{
+		Reviewer reviewer = new Reviewer();
+		
+		System.out.println("Insert your expertise");
+		String keyword = insertKeyword();
+		
+		String role = "Reviewer";
+		String revName = name;
+		String revUsername = username;
+		String revJob = job;
+		String revEmail = email;
+		String pass = password;
+		
+		reviewer.setName(revName);
+		reviewer.setUserName(revUsername);
+		reviewer.setRole(role);
+		reviewer.setJobTitle(revJob);
+		reviewer.setEmail(revEmail);
+		reviewer.setPassword(pass);
+		reviewer.setExpertise(keyword);
+		
+		userList.add(reviewer);
+		displayUser(reviewer);
+		System.out.println(keyword);
+	}
+	
+	
+	public void createKeyword()
+	{
+		Scanner answer = new Scanner(System.in);
+		System.out.println("Please insert the keyword: ");
+		String keyword = answer.nextLine().trim();
+		Keyword newKeyword = new Keyword(keyword);
+		keywordList.add(newKeyword);
+
+	}
+	
+	public void displayKeyword()
+	{
+		int id = 1;
+		
+		System.out.println("Keywords List :");
+		for (Keyword word : keywordList)
+		{
+			String keyword = word.getKeyword();
+			
+			System.out.println("[" + id + "] " + keyword);
+			id = id + 1;
+		}
+		
+		System.out.println("\t\t===================================");
+        System.out.print("\t\t  Please input the keyword number : ");
+	}
+	
+	
+	public void displayAllConference()
+	{
+		int id = 1;
+		System.out.println("Conferences List :");
+		for (Conference conf : conferenceList)
+		{
+			String meeting = conf.getTitle();
+			
+			System.out.println("[" + id + "] " + meeting);
+			id = id + 1;
+		}
+		
+		
+	}
+	
+	public Conference selectConference()
+	{
+		boolean valid = false;
+		Scanner console = new Scanner(System.in);
+		String ans = "";
+		
+        
+        while (!valid)
+		{	
+        	displayAllConference();
+    		System.out.println("\t\t===================================");
+            System.out.print("\t\t  Please select the conference : ");
+			ans = console.nextLine().trim();
+			valid = validation.checkNoBlank(ans);
+		}
+        
+		int number = Integer.parseInt(ans);
+        int opt = number;
+		opt = opt - 1;
+		Conference conference = conferenceList.get(opt);
+		
+		return conference;
+	}
+	
+	public void createAuthor(String name, String username, String job, String email, String password)
+	{
+		Author author = new Author();
+		String autName = name;
+		String autUsername = username;
+		String role = "Author";
+		String autJob = job;
+		String autEmail = email;
+		String pass = password;
+		
+		author.setName(autName);
+		author.setUserName(autUsername);
+		author.setRole(role);
+		author.setJobTitle(autJob);
+		author.setEmail(autEmail);
+		author.setPassword(pass);
+		
+		userList.add(author);
+		displayUser(author);
+	}
+	
+	private void storeKeywordsToKeywordList(String keywordDetails)
+	{
+		String[] allKeyword = keywordDetails.split(";");
+		
+		for (int line = 0; line < allKeyword.length ; line++)
+		{
+			String keyword = allKeyword[line];
+			Keyword newKeyword = new Keyword(keyword);
+			keywordList.add(newKeyword);
+		}
+	}
+	
+	private void storeAuthorsToUserList(String authorDetails)
+	{
+		String[] allAuthor = authorDetails.split(";");
+		
+		
+		for (int line = 0; line < allAuthor.length ; line++)
+		{
+			String[] details = allAuthor[line].split(",");
+			String autName = details[0];
+			String autUsername = details[1];
+			String role = details[2];
+			String autJob = details[3];
+			String autEmail = details[4];
+			String pass = details[5];
+			int totalUser = userList.size();
+			int id = totalUser + 1; 
+			
+			Author author = new Author();
+			author.setName(autName);
+			author.setUserName(autUsername);
+			author.setRole(role);
+			author.setJobTitle(autJob);
+			author.setEmail(autEmail);
+			author.setPassword(pass);
+			
+			authorList.add(author);
+			userList.add(author);
+		}
+	}
+	
+	private void storeChairstoUserList(String chairDetails)
+	{
+		String[] allChair = chairDetails.split(";");
+		
+		
+		for (int line = 0; line < allChair.length ; line++)
+		{
+			String[] details = allChair[line].split(",");
+			String chairName = details[0];
+			String chairUsername = details[1];
+			String role = details[2];
+			String chairJob = details[3];
+			String chairEmail = details[4];
+			String pass = details[5];
+			int totalUser = userList.size();
+			int id = totalUser + 1; 
+			
+			Chair chair = new Chair();
+			chair.setName(chairName);
+			chair.setUserName(chairUsername);
+			chair.setRole(role);
+			chair.setJobTitle(chairJob);
+			chair.setEmail(chairEmail);
+			chair.setPassword(pass);
+			
+			chairList.add(chair);
+			userList.add(chair);
+		}
+	}
+	
+	private void storeReviewerstoUserList(String reviewerDetails)
+	{
+		String[] allReviewer = reviewerDetails.split(";");
+		
+		
+		for (int line = 0; line < allReviewer.length ; line++)
+		{
+			String[] details = allReviewer[line].split(",");
+			String revName = details[0];
+			String revUsername = details[1];
+			String role = details[2];
+			String revJob = details[3];
+			String revEmail = details[4];
+			String pass = details[5];
+			String exp = details[6];
+			int totalUser = userList.size();
+			int id = totalUser + 1; 
+			
+			Reviewer reviewer = new Reviewer();
+			reviewer.setName(revName);
+			reviewer.setUserName(revUsername);
+			reviewer.setRole(role);
+			reviewer.setJobTitle(revJob);
+			reviewer.setEmail(revEmail);
+			reviewer.setPassword(pass);
+			reviewer.setExpertise(exp);
+			
+			reviewerList.add(reviewer);
+			userList.add(reviewer);
+		}
+	}
+	
+	
+	public void storePaperToPaperList(String paperDetails)
+	{
+		System.out.println("This inside paper");
+		String[] allPaper = paperDetails.split(";");
+		
+		
+		for (int line = 0; line < allPaper.length ; line++)
+		{
+			String[] details = allPaper[line].split("///");
+			System.out.println(details[0]);
+			String title = details[0];
+			String content = details[1];
+			ArrayList<String> topic = new ArrayList<String>();
+			String keyword = details[2];
+			topic.add(keyword);
+			String status = details[3];
+			String totalReviews = details[4];
+			String totalReviewers = details[5];
+			String conf = details[6];
+			String aut = details[7];
+			String reviewer = details[8];
+			String review = details[9];
+			
+			int reviewsNumb = Integer.parseInt(totalReviews);
+			int reviewersNumb = Integer.parseInt(totalReviewers);
+			int totalPapers = paperList.size();
+			int id = totalPapers + 1;
+			
+			Paper paper = new Paper(title, content, topic, status, reviewsNumb,
+							reviewersNumb,conf, aut, reviewer, review);
+			paperList.add(paper);
+			displayPaper(paper);
+		}
+	}
+	
+	public void storeConferenceToConferenceList(String conferenceDetails)
+	{
+		
+		String[] allConference = conferenceDetails.split(";");
+		
+		
+		for (int line = 0; line < allConference.length ; line++)
+		{
+			String[] details = allConference[line].split(",");
+			String title = details[0];
+			ArrayList<String> topic = new ArrayList<String>();
+			String keyword = details[1];
+			topic.add(keyword);
+			String date = details[2];
+			String loc = details[3];
+			String speaker = details[4];
+			String desc = details[5];
+			String creator = details[6];
+			String pap = details[7];
+			String rev = details[8];
+			int totalConf = conferenceList.size();
+			int id = totalConf + 1; 
+			
+			Conference newConf = new Conference(title, topic, date, loc, speaker, desc, creator, pap, rev);
+			conferenceList.add(newConf);
+			
+		}displayAllConference();
+	}
+	
+	
+	public void insertContent()
+	{
+		
+		Scanner console = new Scanner(System.in);
+		String finish = "--";
+		StringBuilder b = new StringBuilder();
+		String strLine;
+		System.out.println("Please insert content of your paper");
+		System.out.println("type only '--' at the final line and press enter to finish ");
+		while (!(strLine = console.nextLine()).equals(finish))
+		{
+			b.append(strLine + ";");
+		}
+		
+		String newString = b.toString();
+		System.out.println(newString);
+		
+		String[] allWords = newString.split(";|\\.");
+		
+		for (int line = 0; line < allWords.length ; line++)
+		{
+			String test = allWords[line];
+				System.out.println(test);
+		}
+	}
+	
+	public void submitPaper(Author author)
+	{
+		String title = "";
+		String content= "";
+		String topic = "";
+		String status = "submitted";
+		int totalReviews = 0;
+		int totalReviewers = 0;
+		String conf = "";
+		String aut = "";
+		String reviewer = "";
+		String review = "";
+		
+		boolean valid;
+		
+		Scanner console = new Scanner(System.in);
+		Conference conference = selectConference();
+		ArrayList<String> choosenKeywords = new ArrayList<String>();		
+		choosenKeywords = conference.getTopic();
+		//topic = conference.getTopic().get(0);
+		
+		conf = conference.getTitle();
+		aut = author.getName();
+		
+		System.out.println("Create New Paper");
+		
+		valid = false;
+		while (!valid)
+		{
+			System.out.println("Please insert the title");
+			title = console.nextLine().trim();
+			valid = validation.checkNoBlank(title);
+		}
+		
+		//FIX THIS,MAKE THIS NEATTT
+		String finish = "--";
+		StringBuilder b = new StringBuilder();
+		String strLine;
+		System.out.println("Please insert content of your paper");
+		System.out.println("type only '--' at the final line and press enter to finish ");
+		while (!(strLine = console.nextLine()).equals(finish))
+		{
+			b.append(strLine + ";");
+		}
+		
+		String newString = b.toString();
+		//System.out.println(newString);
+		content = newString;
+		
+		int totalPaper = paperList.size();
+		int id = totalPaper + 1;
+
+		Paper newPap = new Paper(title, content, choosenKeywords, status, totalReviews,
+				totalReviewers,conf, aut, reviewer, review);
+		paperList.add(newPap);
+		displayPaper(newPap);		
+	}
+	
+	public void uploadDataFromFile()
+	{
+		String keywordFile = "keywords.txt";
+		String authorFile = ("authors.txt");
+		String chairFile = ("chairs.txt");
+		String reviewerFile = ("reviewers.txt");
+		String conferenceFile = ("conferences.txt");
+		String paperFile = ("papers.txt");
+		
+		String keywordLines = file.readFile(keywordFile);
+		String authorLines = file.readFile(authorFile);
+		String chairLines = file.readFile(chairFile);
+		String reviewerLines = file.readFile(reviewerFile);
+		String conferenceLines = file.readFile(conferenceFile);
+		String paperLines = file.readFile(paperFile);
+		
+		storeKeywordsToKeywordList(keywordLines);
+		storeAuthorsToUserList(authorLines);
+		storeChairstoUserList(chairLines);
+		storeReviewerstoUserList(reviewerLines);
+		displayAllUser(userList);
+		storeConferenceToConferenceList(conferenceLines);
+		storePaperToPaperList(paperLines);
+		
+	}
+	
+	public void start()
+	{
+		uploadDataFromFile();
+		runCMS();
+	}
+	
+	public void runCMS()
+	{
+		String userName = logIn();
+		
+		User user = getUser(userName);
+		int role = checkRole(user);
+		
+		if (role == 1)
+		{
+			Chair chair = getChair(userName);
+			runCMSChair(chair);
+		}
+		
+		else
+			if(role == 2)
+		{
+				Reviewer reviewer = getReviewer(userName);
+				runCMSReviewer(reviewer);
+		}
+		else
+			if(role == 3)
+		{
+				Author author = getAuthor(userName);
+				runCMSAuthor(author);
+		}
+	}
+	
+	public void runCMSChair(Chair chair)
+	{
+		int option;
+        String answer = "";
+        
+        
+		while(true)
+		{
+			Scanner respon = new Scanner(System.in);
+			boolean valid = false;
+					
+			while(!valid)
+			{
+				menu.chairDisplay();
+				answer = respon.nextLine().trim();
+				valid = validation.integerMenuValidation(answer);
+			}
+			
+			option = Integer.parseInt(answer);
+			
+			switch (option)
+	        {
+	            case 1:
+	                createConference(chair);break;
+	            
+	            case 5:
+	                assignPaper(); break;
+	                
+	            case 8:
+	                logOut(); break;  
+	                
+	            default:
+	                System.out.println("\n\t\tERROR : Invalid Input. Please enter a valid number (1-7) \n ");
+	        }
+				
+		}
+	}
+	
+	public void runCMSAuthor(Author author)
+	{
+		int option;
+        String answer = "";
+        
+        while (true)
+        {
+            Scanner console = new Scanner(System.in);
+            boolean valid = false;
+            
+            while (!valid)
+            {
+               menu.authorDisplay();
+               answer = console.nextLine().trim();
+               valid = validation.integerMenuValidation(answer);
+            }
+            
+            option = Integer.parseInt(answer);
+            
+            switch (option)
+            {
+                case 1:
+                    submitPaper(author);break;
+                    
+                case 5:
+                	logOut();break;
+             
+                default:
+                    System.out.println("\n\t\tERROR : Invalid Input. Please enter a valid number (1-7) \n ");
+            }
+
+        }
+	}
+	
+	public void runCMSReviewer(Reviewer reviewer)
+	{
+		int option;
+        String answer = "";
+        
+        while (true)
+        {
+            Scanner console = new Scanner(System.in);
+            boolean valid = false;
+            
+            while (!valid)
+            {
+               menu.reviewerDisplay();
+               answer = console.nextLine().trim();
+               valid = validation.integerMenuValidation(answer);
+            }
+            
+            option = Integer.parseInt(answer);
+            
+            switch (option)
+            {
+                case 1:
+                   reviewPaper(reviewer);break;
+                
+                case 4:
+                	logOut();break;
+                default:
+                    System.out.println("\n\t\tERROR : Invalid Input. Please enter a valid number (1-7) \n ");
+            }
+
+        }
+	}
+	
+	public void displayConference(Conference conf)
+	{
+		System.out.println("===Conference Details====");
+		System.out.println("Title : " + conf.getTitle());
+		System.out.println("Topic : ");
+		ArrayList<String> topicList = conf.getTopic();
+		int index = 1;
+		for(String keyword : topicList)
+		{
+			System.out.println("[" + index + "]" + keyword);
+			index = index + 1;
+		}
+		System.out.println("Created : " + conf.getDate());
+		System.out.println("Location : " + conf.getLocation());
+		System.out.println("Speaker : " + conf.getSpeaker());
+		System.out.println("Chair : " + conf.getCreator());
+		System.out.println("Paper submission deadline : " + conf.getDeadlinePaper());
+		System.out.println("Review deadline : " + conf.getDeadlineReview());
+		System.out.println("Description : " + conf.getDescription());
+	}
+	
+	public void displayPaper(Paper paper)
+	{
+		System.out.println("===Paper Details====");
+		System.out.println("Author : " + paper.getAuthor());
+		System.out.println("Title : " + paper.getTitle());
+		System.out.println("Conference : " + paper.getConference());
+		
+		System.out.println("Topic : ");
+		ArrayList<String> topicList = paper.getTopic();
+		int index = 1;
+		for(String keyword : topicList)
+		{
+			System.out.println("[" + index + "]" + keyword);
+			index = index + 1;
+		}
+		
+		System.out.println("");
+		System.out.println("Content : " );
+		
+		String[] allWords = paper.getContent().split(";|\\.");
+		
+		for (int line = 0; line < allWords.length ; line++)
+		{
+			String test = allWords[line];
+				System.out.println(test);
+		}
+		
+		System.out.println("");
+		System.out.println("Status : " + paper.getStatus());
+		System.out.println("Total Reviews : " + paper.getTotalReviews());
+		System.out.println("Total Reviewers : " + paper.getTotalReviewers());
+		
+		System.out.println("Reviewer : " + paper.getReviewer());
+		System.out.println("Reviews : " + paper.getReview());
+		
+	}
+	
+	public void reviewPaper(Reviewer reviewer)
+	{
+		ArrayList<Paper> assignedPaper = new ArrayList<Paper>();
+		
+		for(Paper journal : paperList)
+		{
+			if (journal.getReviewer().equals(reviewer.getName()))
+			{
+				assignedPaper.add(journal);
+			}
+		}
+		
+		if (assignedPaper.size() == 0)
+			System.out.println("Relax, you dont have any paper assigned");
+		else
+		{
+			Paper paper = selectPaperToReview(assignedPaper);
+			System.out.println("Selected Paper Details :");
+			displayPaper(paper);
+			createReview(reviewer, paper);
+		}				
+		
+	}
+	
+	public void createReview(Reviewer reviewer, Paper paper)
+	{
+		String status;
+		int rating;
+		String rate = "" ;
+		String comment;
+		String paperTitle;
+		String reviewerPaper;
+			
+		boolean valid;
+		
+		Scanner console = new Scanner(System.in);
+		reviewerPaper = reviewer.getName();
+		paperTitle = paper.getTitle();
+		status = "submitted";
+		System.out.println("Create New Review");
+		
+		valid = false;
+		
+		System.out.println("Please insert your review");
+			
+		
+		String finish = "--";
+		StringBuilder b = new StringBuilder();
+		String strLine;
+		System.out.println("To end you review : type only '--' at the final line and press enter");
+		while (!(strLine = console.nextLine()).equals(finish))
+		{
+			b.append(strLine + ";");
+		}
+		
+		String newString = b.toString();
+		comment = newString;
+		
+		while(!valid)
+		{
+			System.out.println("Please insert papers' rating (1 - 10) ");
+			rate = console.nextLine().trim();
+			valid = validation.checkNoBlank(rate);
+		}
+		
+		rating = Integer.parseInt(rate);
+		
+		Review review = new Review(status,rating,comment,paperTitle,reviewerPaper); 
+		paper.setReview(comment);
+		displayPaper(paper);
+		
+		
+	}
+	
+	public void displayPaperForReviewer(ArrayList<Paper> list)
+	{
+			int index = 1;
+			System.out.println("Papers List :");
+			for (Paper journal : list)
+			{
+				String title = journal.getTitle();
+				String conf = journal.getConference();
+				//String topic = journal.getTopic();
+								
+				int numbOfReviews = journal.getTotalReviews();
+				int numbOfReviewers = journal.getTotalReviewers();
+				
+				System.out.println("ID : " + index);
+				System.out.println("Title : " + title);
+				System.out.println("Topic : ");
+				ArrayList<String> topicList = journal.getTopic();
+				int ind = 1;
+				for(String keyword : topicList)
+				{
+					System.out.println("[" + ind + "]" + keyword);
+					ind = ind + 1;
+				}
+				System.out.println("Conference : " + conf );
+				System.out.println("Total Reviewers : " + numbOfReviews);
+				System.out.println("Total Reviews : " + numbOfReviewers); 
+				System.out.println("============================");
+				index = index + 1;
+							
+			}	
+		
+	}
+	
+	public Paper selectPaperToReview(ArrayList<Paper> list)
+	{
+		Scanner console = new Scanner(System.in);
+		String choose = "";
+		System.out.println("Insert Papers' ID you want to review: ");
+		boolean valid = false;
+		
+		while (!valid)
+		{
+			displayPaperForReviewer(list);
+			choose = console.nextLine().trim();
+			valid = validation.checkNoBlank(choose);
+		}
+		
+		int opt = Integer.parseInt(choose);
+		opt = opt - 1;
+		Paper paper = list.get(opt);
+		
+		return paper;
+	}
+	
+	
+	
+	public void createConference(Chair chair)
+	{	
+		String title = "";
+		String topic = "";
+		String date = "";
+		String loc = "";
+		String speak = "";
+		String desc = "";
+		Chair creator = chair;
+		String pap = "";
+		String rev = "";
+		ArrayList<String> choosenKeywords = new ArrayList<String>();
+		
+		boolean valid;
+		
+		Scanner console = new Scanner(System.in);
+		System.out.println("Create New Conference");
+		
+		valid = false;
+		while (!valid)
+		{
+			System.out.println("Please insert the title");
+			title = console.nextLine().trim();
+			valid = validation.checkNoBlank(title);
+		}
+		
+		valid = false;
+		
+		System.out.println("Select the conference's topic");
+		topic = insertKeyword();
+		choosenKeywords.add(topic);	
+		
+		if (topic.length() != 0)
+		{
+			for (int index = 2 ; index > 0 ; index++)
+			{
+				System.out.println("Select the conference's topic(" + index + ") - press enter to leave blank: ");
+				displayKeyword();
+				String topic2 = console.nextLine().trim();
+				
+				if (topic2.length() != 0)
+				{
+					int number = Integer.parseInt(topic2);
+					number = number - 1;
+					topic2 = keywordList.get(number).getKeyword();
+					choosenKeywords.add(topic2);
+				}
+				else
+					if (topic2.length() == 0)
+						break;	
+			}
+		}
+		
+		while (!valid)
+		{
+			System.out.println("Please insert the conference created date (dd/mm/yyyy)");
+			date = console.nextLine().trim();
+			valid = validation.checkNoBlank(date);
+		}
+		
+		valid = false;
+		while (!valid)
+		{
+			System.out.println("Please insert the location of the conference");
+			loc = console.nextLine().trim();
+			valid = validation.checkNoBlank(loc);
+		}
+		
+		valid = false;
+		while (!valid)
+		{
+			System.out.println("Please insert the speaker of conference");
+			speak = console.nextLine().trim();
+			valid = validation.checkNoBlank(speak);
+		}
+		
+		valid = false;
+		while (!valid)
+		{
+			System.out.println("Please insert the conference description");
+			desc = console.nextLine().trim();
+			valid = validation.checkNoBlank(desc);
+		}
+		
+		valid = false;
+		while (!valid)
+		{
+			System.out.println("Please insert the paper deadline submission date (dd/mm/yyyy)");
+			pap = console.nextLine().trim();
+			valid = validation.checkNoBlank(pap);
+		}
+		
+		valid = false;
+		while (!valid)
+		{
+			System.out.println("Please insert the deadline for review (dd/mm/yyyy)");
+			rev = console.nextLine().trim();
+			valid = validation.checkNoBlank(rev);
+		}
+		
+		String chairName = creator.getName();
+		Conference newConf = new Conference(title, choosenKeywords, date, loc, speak, desc, chairName, pap, rev);
+		conferenceList.add(newConf);
+		displayConference(newConf);
+		
+	}
+	
+	
+	public void chooseRole()
+	{
+		Scanner answer = new Scanner(System.in);
+		
+		menu.displayRoles();
+		String role = answer.nextLine().trim();
+		createUser(role);
+	}
+	
+	
+	
+	
+	
+	
+	
+	public void register()
+	{
+		menu.registerdisplay();
+		chooseRole();
+	}
+	
+}
